@@ -1,0 +1,2 @@
+set(uav1_MESSAGE_FILES "")
+set(uav1_SERVICE_FILES "")

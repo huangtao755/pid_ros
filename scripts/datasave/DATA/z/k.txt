@@ -1,0 +1,26 @@
+			dualpid_ctrl = PidControl(kp_pos=np.array([1.2, 1.2, 1.8]),
+                     ki_pos=np.array([0.05, 0.05, 0.05]),
+                     kd_pos=np.array([0., 0., 0.]),
+                     kp_vel=np.array([2., 2., 4.5]),
+                     ki_vel=np.array([0.1, 0.1, 0.1]),
+                     kd_vel=np.array([0., 0., 0.0]),
+                     kp_att=np.array([8.5, 8.5, 2.5]),
+                ki_att=np.array([0.02, 0.02, 0.02]),
+                	 kd_att=np.array([0.0, 0.0, 0.]),
+                 	 p_v=np.array([0.75, 0.75, 0.75]),
+                     p_a=np.array([0.75, 0.75, 0.85]),
+                     p_r=np.array([0.9, 0.9, 0.95]))
+                     
+
+			(good)dualpid_ctrl = PidControl(kp_pos=np.array([2.2, 2.2, 2.5]),
+                     ki_pos=np.array([0.05, 0.05, 0.12]),
+                     kd_pos=np.array([0., 0., 0.]),
+                     kp_vel=np.array([2., 2., 4.]),
+                     ki_vel=np.array([0.1, 0.1, 0.15]),
+                     kd_vel=np.array([0., 0., 0.0]),
+                     kp_att=np.array([8.5, 8.5, 2.5]),
+                 	 ki_att=np.array([0.02, 0.02, 0.02]),
+                	 kd_att=np.array([0.0, 0.0, 0.]),
+                 	 p_v=np.array([0.75, 0.75, 0.75]),
+                     p_a=np.array([0.75, 0.75, 0.85]),
+                     p_r=np.array([0.9, 0.9, 0.95]))

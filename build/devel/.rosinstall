@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/ht/src/UAC_control/src/pid_ros/build/devel/setup.sh

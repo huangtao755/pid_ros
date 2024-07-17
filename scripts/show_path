@@ -1,0 +1,108 @@
+import rospy
+import math 
+from tf.transformations import quaternion_from_euler
+
+from nav_msgs.msg import Path
+from geometry_msgs.msg import PoseStamped
+
+
+
+def pub_o_path():
+
+    #定义发布者，应该注意的是发布的消息类型始终为Path，Path之下的消息类型geometry_msgs/PoseStamped只是用于赋值，而不是使用PoseStamped发布
+
+    pub_path = rospy.Publisher("path_pubulisher", Path, queue_size = 10)
+
+    msg = Path()
+
+    #指定frame_id和stamp，frame_id是在rviz显示的时候会用到，需要在rviz中fixed frame位置输入你定义的frame_id，这里使用rviz默认的map
+
+    #stamp是时间辍，看了很多例子一般是使用rospy.Time.now()，不知道还有没有其他的设定，挖个坑。
+
+    msg.header.frame_id = "map"
+
+    msg.header.stamp =  rospy.Time.now()
+
+    rate = rospy.Rate(10)
+
+    #由于是定义了一个做圆周的物体，因此还需要给它一些初始值
+
+    x = 0.0
+
+    y = 0.0
+
+    th = 0.0
+
+    vx = 0.1
+
+    vy = -0.1
+
+    vth = 0.1
+
+    #开始循环发布消息
+
+    while not rospy.is_shutdown():
+
+        #定义求出圆的运动方程，并保存经过的点
+
+        dt = 0.1
+
+        delta_x = (vx * math.cos(th) - vy * math.sin(th)) * dt
+
+        delta_y = (vx * math.sin(th) + vy * math.cos(th)) * dt
+
+        delta_th = vth * dt
+
+        x += delta_x
+
+        y += delta_y
+
+        th  += delta_th
+
+        #定义一个变量对PoseStamped进行赋值
+
+        #再次强调，应该注意的是发布的消息类型始终为Path，Path之下的消息类型geometry_msgs/PoseStamped只是用于赋值，而不是使用PoseStamped发布
+
+        pose = PoseStamped()
+
+        pose.pose.position.x = x
+
+        pose.pose.position.y = y
+
+        #由于th是用欧拉角表示，而PoseStamped中是用四元数表示角度用的，因此需要将th转换为四元数表示
+
+        quaternion = quaternion_from_euler(0,0,th)
+
+        pose.pose.orientation.x = quaternion[0]
+
+        pose.pose.orientation.y = quaternion[1]
+
+        pose.pose.orientation.z = quaternion[2]
+
+        pose.pose.orientation.w = quaternion[3]
+
+        #之前提到过PoseStamped消息类型是以列表的形式保存，因此需要将坐标和角度信息保存保存至msg中：
+
+                # //nav_msgs/Path数据类型
+
+                # Header header
+
+                # geometry_msgs/PoseStamped[] poses
+
+        msg.poses.append(pose)
+
+        #发布消息
+
+        pub_path.publish(msg)
+
+        rospy.loginfo("x = {}, y = {}, th = {}".format(x, y, th))
+
+        rate.sleep()
+
+
+if __name__ == "__main__":
+    rospy.init_node("show_path", anonymous=True)
+    try:
+        pub_o_path()
+    except rospy.ROSInterruptException:
+        pass
